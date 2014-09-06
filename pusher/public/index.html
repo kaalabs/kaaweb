@@ -1,0 +1,510 @@
+<style>
+	h1 {
+		background-color: black;
+	}
+	h2 {
+		background-color: black;
+	}
+	p {
+		background-color: black;
+	}
+	div {
+		background-color: black;
+	}
+	body {
+		background-color: black;
+		color: white;
+		font: 20px tahoma, sans-serif;
+		style: bold;
+	}
+	h1 {
+		color: green;
+		font: 25px tahoma, sans-serif;
+		style: bold;
+	}
+	h2 {
+		color: white;
+		font: 10px tahoma, sans-serif;
+	}
+</style>
+
+<h1>Temperatuur & Lichtintensiteit</h1>
+<script src="primus.js"></script>
+<script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="//code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
+<script type="text/javascript">
+	var primus = Primus.connect();
+
+	primus.on('data', function received(data) {
+		if (data.room == 'mqtt') {
+			var elmarr = data.topic.split("/");
+			var alength = elmarr.length;
+			var elm = elmarr[alength - 3] + elmarr[alength - 2] + elmarr[alength - 1];
+			console.log(data.topic + ' elm:' + elm);
+			//$('#'.concat(elm)).delay(300).fadeOut(200).fadeIn(200).html(data.payload);
+			var payloadold = $("#".concat(elm)).html();
+			$("#".concat(elm)).html(data.payload);
+			if (payloadold != data.payload) {
+				$("#".concat(elm)).effect("highlight", {
+					color: '#F5A89A'
+				}, 1000);
+			};
+		}
+	});
+	primus.write({
+		room: 'subscribe',
+		topic: '/test/slaapkamerstijn/hem/temp'
+	});
+	primus.write({
+		room: 'subscribe',
+		topic: '/home/slaapkamerstijn/televisie/verbruik'
+	});
+	primus.write({
+		room: 'subscribe',
+		topic: '/test/slaapkameranouk/hem/temp'
+	});
+	primus.write({
+		room: 'subscribe',
+		topic: '/home/slaapkameranouk/televisie/verbruik'
+	});
+	primus.write({
+		room: 'subscribe',
+		topic: '/home/slaapkamerouders/hem/temp'
+	});
+	primus.write({
+		room: 'subscribe',
+		topic: '/home/slaapkamerouders/hem/lightlevel'
+	});
+	primus.write({
+		room: 'subscribe',
+		topic: '/home/slaapkamerouders/hoofdverlichting/verbruik'
+	});
+	primus.write({
+		room: 'subscribe',
+		topic: '/home/slaapkamerouders/boekenkastverlichting/verbruik'
+	});
+	primus.write({
+		room: 'subscribe',
+		topic: '/home/slaapkamerouders/kledingkastverlichting/verbruik'
+	});
+	primus.write({
+		room: 'subscribe',
+		topic: '/test/slaapkamerstijn/hem/lightlevel'
+	});
+	primus.write({
+		room: 'subscribe',
+		topic: '/test/slaapkameranouk/hem/lightlevel'
+	});
+	primus.write({
+		room: 'subscribe',
+		topic: '/home/badkamer/tempint'
+	});
+	primus.write({
+		room: 'subscribe',
+		topic: '/home/badkamer/humidity'
+	});
+	primus.write({
+		room: 'subscribe',
+		topic: '/home/badkamer/verlichting/hoofdverlichting'
+	});
+	primus.write({
+		room: 'subscribe',
+		topic: '/home/slaapkamerbram/televisie/verbruik'
+	});
+	primus.write({
+		room: 'subscribe',
+		topic: '/home/badkamer/ventilator'
+	});
+	primus.write({
+		room: 'subscribe',
+		topic: '/home/badkamer/ventilator/setpoint'
+	});
+	primus.write({
+		room: 'subscribe',
+		topic: '/home/meterkast/energiemeter/verbruiklaag'
+	});
+	primus.write({
+		room: 'subscribe',
+		topic: '/home/meterkast/energiemeter/verbruikhoog'
+	});
+	primus.write({
+		room: 'subscribe',
+		topic: '/home/meterkast/energiemeter/tarief'
+	});
+	primus.write({
+		room: 'subscribe',
+		topic: '/home/meterkast/energiemeter/verbruikactueel'
+	});
+	primus.write({
+		room: 'subscribe',
+		topic: '/home/tijd/tijdstring'
+	});
+	primus.write({
+		room: 'subscribe',
+		topic: '/home/woonkamer/multimedia/verbruik'
+	});
+	primus.write({
+		room: 'subscribe',
+		topic: '/home/verdieping1/router/verbruik'
+	});
+</script>
+<table class="tablegv" style="width: 500px;">
+	<tbody>
+		<tr class="tablegvHeader">
+			<tr>
+				<td>
+					<left>Slaapkamer Stijn</left>
+				</td>
+				<td>
+					<right>
+						<td id="slaapkamerstijnhemtemp">
+					</right>
+					</td>
+					<td>
+						<right>
+							<td id="slaapkamerstijnhemlightlevel">
+						</right>
+						</td>
+			</tr>
+			<tr>
+				<td>Ouder Slaapkamer</td>
+				<td colspan="1 ">
+					<right>
+						<td id="slaapkameroudershemtemp ">
+					</right>
+					</td>
+					<td colspan="1">
+						<right>
+							<td id="slaapkameroudershemlightlevel">
+						</right>
+						</td>
+			</tr>
+			<tr>
+				<td>Slaapkamer Anouk</td>
+				<td colspan="1">
+					<right>
+						<td id="slaapkameranoukhemtemp">
+					</right>
+					</td>
+					<td colspan="1">
+						<right>
+							<td id="slaapkameranoukhemlightlevel">
+						</right>
+						</td>
+			</tr>
+	</tbody>
+</table>
+<h1>Energie Huis</h1>
+<table class="tablegv" style="width: 500px;">
+	<tbody>
+		<tr class="tablegvHeader">
+			<tr>
+				<td>
+					<left>Actueel verbruik</left>
+				</td>
+				<td>
+					<right>
+						<td id="meterkastenergiemeterverbruikactueel">
+					</right>
+					</td>
+			</tr>
+			<tr>
+				<td>
+					<left>Tarief</left>
+				</td>
+				<td>
+					<right>
+						<td id="meterkastenergiemetertarief ">
+					</right>
+					</td>
+			</tr>
+			<tr>
+				<td>
+					<left>Stand Hoog tarief</left>
+				</td>
+				<td>
+					<right>
+						<td id="meterkastenergiemeterverbruikhoog">
+					</right>
+					</td>
+			</tr>
+			<tr>
+				<td>
+					<left>Stand Laag tarief</left>
+				</td>
+				<td>
+					<right>
+						<td id="meterkastenergiemeterverbruiklaag">
+					</right>
+					</td>
+			</tr>
+	</tbody>
+</table>
+<h1>Badkamer</h1>
+<table class="tablegv" style="width: 500px;">
+	<tbody>
+		<tr class="tablegvHeader">
+			<tr>
+				<td>
+					<left>Temperatuur</left>
+				</td>
+				<td>
+					<right>
+						<td id="homebadkamertempint">
+					</right>
+					</td>
+			</tr>
+			<tr>
+				<td>
+					<left>Luchtvochtigheid</left>
+				</td>
+				<td>
+					<right>
+						<td id="homebadkamerhumidity">
+					</right>
+					</td>
+			</tr>
+			<tr>
+				<td>
+					<left>Verlichting</left>
+				</td>
+				<td>
+					<right>
+						<td id="badkamerverlichtinghoofdverlichting">
+					</right>
+					</td>
+					<td align='center'>
+						<button style="height:50px; width:85px;background-color:#00e600; color:white;text-shadow: 1px 1px #686868;" type="button" onclick="primus.write({room:'publish', topic:'/home/badkamer/verlichting/SET',payload:'1,1,1'})">AAN</button>
+					</td>
+					<td align='center'>
+						<button style="height:50px; width:85px;background-color:red; color:white;text-shadow: 1px 1px #686868;" type="button" onclick="primus.write({room:'publish',  topic:'/home/badkamer/verlichting/SET',payload:'0,0,1'})">UIT</button>
+					</td>
+			</tr>
+			<tr>
+				<td>
+					<left>Ventilator</left>
+				</td>
+				<td>
+					<right>
+						<td id="homebadkamerventilator">
+					</right>
+					</td>
+					<td align='center'>
+						<button style="height:50px; width:85px;background-color:#00e600; color:white;text-shadow: 1px 1px #686868;" type="button" onclick="primus.write({room:'publish', topic:'/home/badkamer/ventilator/SET',payload:'23,1,1'})">AAN</button>
+					</td>
+					<td align='center'>
+						<button style="height:50px; width:85px;background-color:red; color:white;text-shadow: 1px 1px #686868;" type="button" onclick="primus.write({room:'publish', topic:'/home/badkamer/ventilator/SET',payload:'23,0,0'})">UIT</button>
+					</td>
+					<td>
+						<left>
+							<td id="badkamerventilatorsetpoint">
+						</left>
+						</td>
+			</tr>
+</table>
+</tbody>
+<h1>Ouder Slaapkamer</h1>
+<table class="tablegv" style="width: 500px;">
+	<tbody>
+		<tr class="tablegvHeader">
+			<tr>
+				<td>
+					<left>Hoofdverlichting</left>
+				</td>
+				<td>
+					<right>
+						<td id="slaapkameroudershoofdverlichtingverbruik">
+					</right>
+					</td>
+					<td align='center'>
+						<button style="height:50px; width:85px;background-color:#00e600; color:white;text-shadow: 1px 1px #686868;" type="button" onclick="primus.write({room:'publish', topic:'/home/slaapkamerouders/hoofdverlichting/SET',payload:'ON'})">AAN</button>
+					</td>
+					<td align='center'>
+						<button style="height:50px; width:85px;background-color:red; color:white;text-shadow: 1px 1px #686868;" type="button" onclick="primus.write({room:'publish',  topic:'/home/slaapkamerouders/hoofdverlichting/SET',payload:'OFF'})">UIT</button>
+					</td>
+					<td align='center'>
+						<button style="height:50px; width:85px;background-color:#0033FF; color:white;text-shadow: 1px 1px #686868;" type="button" onclick="primus.write({room:'publish',  topic:'/home/slaapkamerouders/hoofdverlichting/SET',payload:'INFO'})">VERVERS</button>
+					</td>
+			</tr>
+			<tr>
+				<td>
+					<left>Verlichting Boekenkast</left>
+				</td>
+				<td>
+					<right>
+						<td id="slaapkameroudersboekenkastverlichtingverbruik">
+					</right>
+					</td>
+					<td align='center'>
+						<button style="height:50px; width:85px;background-color:#00e600; color:white;text-shadow: 1px 1px #686868;" type="button" onclick="primus.write({room:'publish', topic:'/home/slaapkamerouders/boekenkastverlichting/SET',payload:'ON'})">AAN</button>
+					</td>
+					<td align='center'>
+						<button style="height:50px; width:85px;background-color:red; color:white;text-shadow: 1px 1px #686868;" type="button" onclick="primus.write({room:'publish',  topic:'/home/slaapkamerouders/boekenkastverlichting/SET',payload:'OFF'})">UIT</button>
+					</td>
+					<td align='center'>
+						<button style="height:50px; width:85px;background-color:#0033FF; color:white;text-shadow: 1px 1px #686868;" type="button" onclick="primus.write({room:'publish',  topic:'/home/slaapkamerouders/boekenkastverlichting/SET',payload:'INFO'})">VERVERS</button>
+					</td>
+			</tr>
+			<tr>
+				<td>
+					<left>Verlichting Kledingkast</left>
+				</td>
+				<td>
+					<right>
+						<td id="slaapkamerouderskledingkastverlichtingverbruik">
+					</right>
+					</td>
+					<td align='center'>
+						<button style="height:50px; width:85px;background-color:#00e600; color:white;text-shadow: 1px 1px #686868;" type="button" onclick="primus.write({room:'publish', topic:'/home/slaapkamerouders/kledingkastverlichting/SET',payload:'ON'})">AAN</button>
+					</td>
+					<td align='center'>
+						<button style="height:50px; width:85px;background-color:red; color:white;text-shadow: 1px 1px #686868;" type="button" onclick="primus.write({room:'publish',  topic:'/home/slaapkamerouders/kledingkastverlichting/SET',payload:'OFF'})">UIT</button>
+					</td>
+					<td align='center'>
+						<button style="height:50px; width:85px;background-color:#0033FF; color:white;text-shadow: 1px 1px #686868;" type="button" onclick="primus.write({room:'publish',  topic:'/home/slaapkamerouders/kledingkastverlichting/SET',payload:'INFO'})">VERVERS</button>
+					</td>
+			</tr>
+	</tbody>
+</table>
+<h1>Slaapkamer Stijn</h1>
+<table class="tablegv" style="width: 500px;">
+	<tbody>
+		<tr class="tablegvHeader">
+			<tr>
+				<td>
+					<left>Televisie</left>
+				</td>
+				<td>
+					<right>
+						<td id="slaapkamerstijntelevisieverbruik">
+					</right>
+					</td>
+					<td align='center'>
+						<button style="height:50px; width:85px;background-color:#00e600; color:white;text-shadow: 1px 1px #686868;" type="button" onclick="primus.write({room:'publish', topic:'/home/slaapkamerstijn/televisie/SET',payload:'ON'})">AAN</button>
+					</td>
+					<td align='center'>
+						<button style="height:50px; width:85px;background-color:red; color:white;text-shadow: 1px 1px #686868;" type="button" onclick="primus.write({room:'publish',  topic:'/home/slaapkamerstijn/televisie/SET',payload:'OFF'})">UIT</button>
+					</td>
+					<td align='center'>
+						<button style="height:50px; width:85px;background-color:#0033FF; color:white;text-shadow: 1px 1px #686868;" type="button" onclick="primus.write({room:'publish',  topic:'/home/slaapkamerstijn/televisie/SET',payload:'INFO'})">VERVERS</button>
+					</td>
+			</tr>
+	</tbody>
+</table>
+<h1>Slaapkamer Bram</h1>
+<table class="tablegv" style="width: 500px;">
+	<tbody>
+		<tr class="tablegvHeader">
+			<tr>
+				<td>
+					<left>Televisie</left>
+				</td>
+				<td>
+					<right>
+						<td id="slaapkamerbramtelevisieverbruik">
+					</right>
+					</td>
+					<td align='center'>
+						<button style="height:50px; width:85px;background-color:#00e600; color:white;text-shadow: 1px 1px #686868;" type="button" onclick="primus.write({room:'publish', topic:'/home/slaapkamerbram/televisie/SET',payload:'ON'})">AAN</button>
+					</td>
+					<td align='center'>
+						<button style="height:50px; width:85px;background-color:red; color:white;text-shadow: 1px 1px #686868;" type="button" onclick="primus.write({room:'publish',  topic:'/home/slaapkamerbram/televisie/SET',payload:'OFF'})">UIT</button>
+					</td>
+					<td align='center'>
+						<button style="height:50px; width:85px;background-color:#0033FF; color:white;text-shadow: 1px 1px #686868;" type="button" onclick="primus.write({room:'publish',  topic:'/home/slaapkamerbram/televisie/SET',payload:'INFO'})">VERVERS</button>
+					</td>
+			</tr>
+	</tbody>
+</table>
+<h1>Slaapkamer Anouk</h1>
+<table class="tablegv" style="width: 500px;">
+	<tbody>
+		<tr class="tablegvHeader">
+			<tr>
+				<td>
+					<left>Televisie</left>
+				</td>
+				<td>
+					<right>
+						<td id="slaapkameranouktelevisieverbruik">
+					</right>
+					</td>
+					<td align='center'>
+						<button style="height:50px; width:85px;background-color:#00e600; color:white;text-shadow: 1px 1px #686868;" type="button" onclick="primus.write({room:'publish', topic:'/home/slaapkameranouk/televisie/SET',payload:'ON'})">AAN</button>
+					</td>
+					<td align='center'>
+						<button style="height:50px; width:85px;background-color:red; color:white;text-shadow: 1px 1px #686868;" type="button" onclick="primus.write({room:'publish',  topic:'/home/slaapkameranouk/televisie/SET',payload:'OFF'})">UIT</button>
+					</td>
+					<td align='center '>
+						<button style="height:50px; width:85px;background-color:#0033FF; color:white;text-shadow: 1px 1px #686868;" type="button" onclick="primus.write({room:'publish ',  topic:' / home / slaapkameranouk / televisie / SET ',payload:'INFO '})">VERVERS</button>
+					</td>
+			</tr>
+	</tbody>
+</table>
+<h1>Woonkamer</h1>
+<table class="tablegv" style="width: 500px;">
+	<tbody>
+		<tr class="tablegvHeader">
+			<tr>
+				<td>
+					<left>Televisie-set</left>
+				</td>
+				<td>
+					<right>
+						<td id="woonkamermultimediaverbruik">
+					</right>
+					</td>
+					<td align='center'>
+						<button style="height:50px; width:85px;background-color:#00e600; color:white;text-shadow: 1px 1px #686868;" type="button" onclick="primus.write({room:'publish', topic:'/home/woonkamer/multimedia/SET',payload:'ON'})">AAN</button>
+					</td>
+					<td align='center'>
+						<button style="height:50px; width:85px;background-color:red; color:white;text-shadow: 1px 1px #686868;" type="button" onclick="primus.write({room:'publish',  topic:'/home/woonkamer/multimedia/SET',payload:'OFF'})">UIT</button>
+					</td>
+					<td align='center'>
+						<button style="height:50px; width:85px;background-color:#0033FF; color:white;text-shadow: 1px 1px #686868;" type="button" onclick="primus.write({room:'publish',  topic:'/home/woonkamer/multimedia/SET',payload:'INFO'})">VERVERS</button>
+					</td>
+			</tr>
+	</tbody>
+</table>
+<h1>Verdieping 1</h1>
+<table class="tablegv" style="width: 500px;">
+	<tbody>
+		<tr class="tablegvHeader">
+			<tr>
+				<td>
+					<left>Router</left>
+				</td>
+				<td>
+					<right>
+						<td id="verdieping1routerverbruik">
+					</right>
+					</td>
+					<td align='center'>
+						<button style="height:50px; width:85px;background-color:#00e600; color:white;text-shadow: 1px 1px #686868;" type="button" onclick="primus.write({room:'publish', topic:'/home/verdieping1/router/SET',payload:'ON'})">AAN</button>
+					</td>
+					<td align='center'>
+						<button style="height:50px; width:85px;background-color:red; color:white;text-shadow: 1px 1px #686868;" type="button" onclick="primus.write({room:'publish',  topic:'/home/verdieping1/router/SET',payload:'OFF'})">UIT</button>
+					</td>
+					<td align='center'>
+						<button style="height:50px; width:85px;background-color:#0033FF; color:white;text-shadow: 1px 1px #686868;" type="button" onclick="primus.write({room:'publish',  topic:'/home/verdieping1/router/SET',payload:'INFO'})">VERVERS</button>
+					</td>
+			</tr>
+	</tbody>
+</table>
+<h1>Tijd</h1>
+<table class="tablegv" style="width: 500px;">
+	<tbody>
+		<tr class="tablegvHeader">
+		</tr>
+		<tr>
+			<td>
+				<left>kaaNet</left>
+			</td>
+			<td>
+				<right>
+					<td id="hometijdtijdstring">
+				</right>
+				</td>
+		</tr>
+	</tbody>
+</table>

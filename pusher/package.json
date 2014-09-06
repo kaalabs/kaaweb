@@ -1,0 +1,19 @@
+{
+  "name": "echo",
+  "version": "0.0.0",
+  "description": "simple echo example",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "primus",
+    "example",
+    "echo"
+  ],
+  "author": "Arnout Kazemier",
+  "license": "MIT",
+  "dependencies": {
+    "engine.io-client": "~1.3.1"
+  }
+}
